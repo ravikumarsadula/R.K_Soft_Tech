@@ -24,6 +24,7 @@
       width: 100%;
       max-width: 900px;
       box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+      position: relative;
     }
 
     h2 {
@@ -63,6 +64,30 @@
     .alert.show {
       display: block;
     }
+
+    /* Popup message styles */
+    .popup-message {
+      position: fixed;
+      top: 20%;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #4BB543; /* green */
+      color: white;
+      padding: 20px 35px;
+      border-radius: 12px;
+      font-weight: bold;
+      font-size: 1.2rem;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.5s ease;
+      z-index: 1050;
+    }
+
+    .popup-message.show {
+      opacity: 1;
+      pointer-events: auto;
+    }
   </style>
 </head>
 <body>
@@ -70,7 +95,7 @@
     <div id="welcomeSection">
       <h2>Welcome to R.K Soft Tech</h2>
       <h2>Your daily Progress Tracker</h2>
-<h5 style="font-style: italic; color: green; text-align: center;">"Your Progress, Your Power."</h5>
+      <h5 style="font-style: italic; color: green; text-align: center;">"Your Progress, Your Power."</h5>
       <div class="d-flex justify-content-center gap-3 flex-wrap mt-4">
         <button id="goToSaveBtn" class="btn btn-primary btn-lg px-5 py-2">Add Progress</button>
         <button id="goToViewBtn" class="btn btn-info btn-lg px-5 py-2 text-white">View Progress</button>
@@ -108,6 +133,11 @@
       <div class="text-center mt-4">
         <button id="backToWelcomeFromView" class="btn btn-info btn-lg px-4 py-2 text-white">Back to Home</button>
       </div>
+    </div>
+
+    <!-- Popup message for save confirmation -->
+    <div id="savePopup" class="popup-message">
+      Your progress is saved successfully!
     </div>
   </div>
 
@@ -292,8 +322,14 @@
         return;
       }
       if (saveData(date)) {
-        showSaveAlert();
-        showSection(welcomeSection);
+        // Show popup message
+        const popup = document.getElementById('savePopup');
+        popup.classList.add('show');
+
+        setTimeout(() => {
+          popup.classList.remove('show');
+          showSection(welcomeSection);
+        }, 2000);
       }
     });
 
